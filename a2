@@ -1,0 +1,68 @@
+(* taken from internet, http://ocaml.org/learn/tutorials/99problems.html#BinaryTrees *)
+
+type 'a binary_tree =
+    | Empty
+    | Node of 'a * 'a binary_tree * 'a binary_tree;;
+
+let rec insert tree x = match tree with
+    | Empty -> Node(x, Empty, Empty)
+    | Node(y, l, r) ->
+       if x = y then tree
+       else if x < y then Node(y, insert l x, r)
+       else Node(y, l, insert r x)
+  let create_tree l = List.fold_left insert Empty l;;
+
+
+let rec tree_map tree f = match tree with
+  | Empty -> Empty
+  | Node (y, l, r) -> Node (f y, tree_map l f, tree_map r f);;
+
+let delete_data tree =
+  tree_map tree (fun (x,y) -> x);;
+
+let rec tree_fold f e t = match t with
+  | Empty -> e
+  | Node (y, l, r) -> f y (tree_fold f e l) (tree_fold f e r);;
+
+let t = Node (9, Node (87, Empty, Empty),
+                    Node (1, Node (4, Empty, Empty), Empty));;
+
+let rec size t =
+  tree_fold (fun x y y -> )
+
+let rec tree_fold_reflect f e t = match t with
+  | Empty -> Empty
+  | Node (y, l, r) -> Node ( y, (tree_fold_reflect f e r), (tree_fold_reflect f e l));;
+
+(* from online *)
+let rec fold f a n = match n with
+Empty -> a
+| Node (m, left, right) -> fold f (f (fold f a left) m) right
+
+let rec tree_fold f e t list(q) = match t with
+  | Empty -> e
+  | Node (y, l, r) -> q@[(f y ; f (tree_fold f e l q) ; f (tree_fold f e r q))];;
+
+let f x y z = y @ x @ z;;
+
+let rec tree_fold f e t = match t with
+  | Empty -> []
+  | Node (y, l, r) -> f [y] (tree_fold f e l) (tree_fold f e r);;
+
+  tree_fold f e l @ [y] @ tree_fold f e r;;
+
+let rec tree_fold f e t = match t with
+  | Empty -> []
+  | Node (y, l, r) -> tree_fold f e l @ [y] @ tree_fold f e r;;
+
+let rec powerseries (c : int) l k = match l with
+  | [] -> 0
+  | x :: t -> if k = 0 then x + powerseries c t (k+1)
+              else pow (x + c) k + powerseries c t (k+1);;
+
+let rec pow a = function
+  | 0 -> 1
+  | 1 -> a
+  | n ->
+    let b = pow a (n / 2) in
+    b * b * (if n mod 2 = 0 then 1 else a)          ;;
